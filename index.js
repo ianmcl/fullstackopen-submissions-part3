@@ -1,4 +1,5 @@
 const express = require('express')
+const morgan = require('morgan')
 const app = express()
 
 let persons = [
@@ -23,6 +24,15 @@ let persons = [
     "number": "39-23-6423122"
   }
 ]
+
+morgan.token('req-body', function (req, res) {
+  if (req.method === 'POST') {
+    return JSON.stringify(req.body)
+  }
+  return ''
+})
+
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :req-body'))
 
 app.use(express.json())
 
